@@ -21,8 +21,8 @@ class MyFw_ControllerFront {
         $this->_app_config = $config;
         
         // include and start autoloader
-        include_once("JxAutoloader.php");
-        JxAutoloader::Register();
+        include_once("Autoloader.php");
+        Autoloader::Register();
         
         // set Instance
         self::$instance = $this;
