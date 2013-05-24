@@ -11,7 +11,7 @@ class Autoloader
 		$pObjectFilePath = $path.'.php';
         //echo "<br>Load class: ".$pObjectFilePath; //die;
         if (self::verifyClassExists($pObjectFilePath)) {
-            include_once($pObjectFilePath);
+        require_once $pObjectFilePath;
         } else {
             throw new Zend_Exception("ERRORE: $pObjectFilePath NON esiste!");
         }
