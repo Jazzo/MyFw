@@ -1,7 +1,7 @@
 <?php
-include_once 'PHPMailer/class.phpmailer.php';
+
 class MyFw_Mail
-    extends PHPMailer
+    extends Zend_Mail
 {
     /**
      * the zend Config object
@@ -29,28 +29,12 @@ class MyFw_Mail
 
         // set Transport
 		$this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/resources/config/email.ini', APPLICATION_ENV);
-        if ($this->_config->use_smtp_mail == 1)
-		{
-            $this->IsSMTP();
-            $this->Host          = $this->_config->smtp_host;
-            $this->Helo          = $this->_config->smtp_cfg->name;
-            $this->SMTPAuth      = true;
-            $this->Username      = $this->_config->smtp_cfg->username;
-            $this->Password      = $this->_config->smtp_cfg->password;
-
-            /**
-            * Sets connection prefix.
-            * Options are "", "ssl" or "tls"
-            * @var string
-            */
-            $this->SMTPSecure    = 'ssl';
-            $this->Port = 465;
-            
-//			Zend_Mail::setDefaultTransport( new Zend_Mail_Transport_Smtp($this->_config->smtp_host, $this->_config->smtp_cfg->toArray()) );
+        if ($this->_config->use_smtp_mail == 1) {
+			Zend_Mail::setDefaultTransport( new Zend_Mail_Transport_Smtp($this->_config->smtp_host, $this->_config->smtp_cfg->toArray()) );
         }
 		
 		// Set Default From
-        $this->SetFrom($this->_config->default_email, $this->_config->default_name, false );
+        $this->SetFrom($this->_config->default_email, $this->_config->default_name);
 
         // set Zend_View
         $this->_view = self::getDefaultView();
@@ -66,13 +50,6 @@ class MyFw_Mail
         return self::$_defaultView;
     }
     
-    // set Subject (Translate it!)
-    public function setSubject($subject)
-    {
-        $this->Subject = $subject;
-        return $this;
-    }
-
     // set params in View instance
     public function setViewParam($property, $value)
     {
@@ -83,10 +60,19 @@ class MyFw_Mail
     public function sendHtmlTemplate($template, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
         $html = $this->_view->fetch($template);
-        $this->Body = $html;
-        $this->IsHTML(true);
-        // $this->setBodyText(strip_tags($html));
-        return $this->Send();
+        $this->setBodyHtml($html);
+        $this->setBodyText(strip_tags($html));
+        try {
+            return $this->send();
+        } catch (Exception $exc) {
+            return false;
+           /*
+            * TODO: Catch Error and do something....
+            echo "<pre>";
+            echo $exc->getMessage();
+            echo "</pre>";die;
+            */
+        }
     }
 
     
