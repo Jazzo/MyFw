@@ -85,14 +85,18 @@ class MyFw_ControllerFront {
 
     private function _dispatch() {
         $cObj = $this->invokeControllerAction();
-        $cObj->initContent();
+        if($cObj instanceof MyFw_Controller) {
+            $cObj->initContent();
+        } else {
+            throw new Exception("ERROR: Controller is NOT an object!");
+        }
     }
     
     
     function invokeControllerAction()
     {
         try {
-            $controllerName = "controller_".$this->_controller;
+            $controllerName = "Controller_".$this->_controller;
             if(class_exists($controllerName)) {
                 $controllerObj = new $controllerName;
                 $actionName = $this->_action."Action";
@@ -101,12 +105,12 @@ class MyFw_ControllerFront {
                 $controllerObj->$actionName();
                 return $controllerObj;
             } else {
-                throw new Exception("ERROR: Controller NOT ecists!");
+                throw new Exception("ERROR: Controller NOT exists!");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-        //throw new Exception("ERROR: Controller/Action NOT ecists!");
+        //throw new Exception("ERROR: Controller/Action NOT exists!");
     }
 
 

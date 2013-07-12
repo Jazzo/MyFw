@@ -2,16 +2,16 @@
 class Autoloader
 {
 	public static function Register() {
-		return spl_autoload_register(array('Autoloader', 'LoadClass'));
+		return spl_autoload_register(array('Autoloader', 'autoload'));
 	}
 
-	public static function LoadClass($cName)
+	public static function autoload($cName)
 	{
-        $path = str_replace("_", "/", $cName);
+        $path = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $cName);
 		$pObjectFilePath = $path.'.php';
         //echo "<br>Load class: ".$pObjectFilePath; //die;
         if (self::verifyClassExists($pObjectFilePath)) {
-        require_once $pObjectFilePath;
+            require_once $pObjectFilePath;
         } else {
             throw new Zend_Exception("ERRORE: $pObjectFilePath NON esiste!");
         }
@@ -25,7 +25,7 @@ class Autoloader
             foreach($arPaths AS $path)
             {
                 // echo "<br>Path: ".$path;
-                if (file_exists($path . "/" . $pOFP)) {
+                if (file_exists($path . DIRECTORY_SEPARATOR . $pOFP)) {
                     return true;
                 }
             }

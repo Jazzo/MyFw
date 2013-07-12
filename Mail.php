@@ -28,7 +28,7 @@ class MyFw_Mail
         parent::__construct($charset);
 
         // set Transport
-		$this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/resources/config/email.ini', APPLICATION_ENV);
+		$this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/resources/Config/email.ini', APPLICATION_ENV);
         if ($this->_config->use_smtp_mail == 1) {
 			Zend_Mail::setDefaultTransport( new Zend_Mail_Transport_Smtp($this->_config->smtp_host, $this->_config->smtp_cfg->toArray()) );
         }
