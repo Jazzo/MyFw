@@ -10,6 +10,7 @@ class MyFw_Layout {
     private $hasToDisplay = true;
     private $tpl;
     private $arContents = array();
+    private $arOnLoads = array();
     private $contentName = "content";
     
     function __construct() {
@@ -39,8 +40,16 @@ class MyFw_Layout {
                     $this->tpl->assign($name, $tpl);
                 }
             }
+            
+            // add OnLoads jQuery functions if exists
+            $this->tpl->assign("arOnLoads", $this->arOnLoads);
+            
             // Display the LAYOUT template using the assigned values
             $this->tpl->display('layout.tpl.php');
         }
+    }
+    
+    function addOnLoad($js) {
+        $this->arOnLoads[] = $js;
     }
 }
