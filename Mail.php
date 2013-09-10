@@ -63,7 +63,11 @@ class MyFw_Mail
         $this->setBodyHtml($html);
         $this->setBodyText(strip_tags($html));
         try {
-            return $this->send();
+            if(APPLICATION_ENV == "production") {
+                return $this->send();
+            } else {
+                return true;
+            }
         } catch (Exception $exc) {
             return false;
            /*
