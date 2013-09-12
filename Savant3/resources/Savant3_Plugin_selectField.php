@@ -8,7 +8,8 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
     public $_attr_other = array(
                         'id',
                         'class',
-                        'onclick'
+                        'onclick',
+                        'onchange'
     );
 	/**
 	* 

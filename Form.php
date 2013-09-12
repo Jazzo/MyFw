@@ -25,7 +25,7 @@ class MyFw_Form {
     function getFields() {
         return $this->_fields;
     }
-
+    
     function getFieldByAttr($at, $val) {
         if(count($this->_fields) > 0) {
             $fields = array();
@@ -91,6 +91,11 @@ class MyFw_Form {
         return $values;
     }
 
+    function setOptions($field, array $options) {
+        $this->_fields[$field]["options"] = $options;
+    }
+    
+    
     function setRequired($field) {
         $this->_fields[$field]["required"] = true;
     }
