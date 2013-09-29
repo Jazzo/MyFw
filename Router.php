@@ -68,6 +68,17 @@ class MyFw_Router {
                 }
             }
         }
+        
+    /*
+     * Set Vars by QUERY STRING
+     */
+        $oAr = array();
+        parse_str($_SERVER['QUERY_STRING'], $oAr);
+        if(count($oAr) > 0 ) {
+            foreach($oAr AS $vName => $vVal) {
+                $this->_params[$vName] = $vVal;
+            }
+        }
 
     /*
      * Capitalize some letters of Controllers and Actions
@@ -76,7 +87,7 @@ class MyFw_Router {
         $this->_action = $this->capitalizeAction($action);
         //echo "<br>Controller: ". $this->_controller;
         //echo "<br>Action: ". $this->_action;
-        //Zend_Debug::dump($this->_params);
+        
     }
 
     private function capitalizeController($t) {
