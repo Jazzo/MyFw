@@ -100,17 +100,22 @@ class MyFw_ControllerFront {
             if(class_exists($controllerName)) {
                 $controllerObj = new $controllerName;
                 $actionName = $this->_action."Action";
-            //echo "<br>ActionController call -> $controllerName :: $actionName";
+                //echo "<br>ActionController call -> $controllerName :: $actionName";
                 // Invoke Action and return the Controller Object
-                $controllerObj->$actionName();
-                return $controllerObj;
-            } else {
-                throw new Exception("ERROR: Controller NOT exists!");
+                if(method_exists($controllerObj, $actionName)) {
+                    $controllerObj->$actionName();
+                    return $controllerObj;
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-        //throw new Exception("ERROR: Controller/Action NOT exists!");
+
+        // ERROR 404
+        $this->_controller = 'Index';
+        $this->_action = 'error';
+        $this->_params = array("code" => 404);
+        return $this->invokeControllerAction();
     }
 
 
