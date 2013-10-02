@@ -87,7 +87,7 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
                 if( isset($attrs["errorMessage"]) && $attrs["errorMessage"] != "" ) {
                     $error = $attrs["errorMessage"];
                 } else {
-                    $error = 'This field is required!';
+                    $error = 'Questo campo è obbligatorio!';
                 }
             } else {
                 $error = $attrs["error"];
