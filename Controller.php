@@ -88,13 +88,15 @@ class MyFw_Controller {
         exit;
     }
     
+    // This is a "Post/Redirect/Get (PRG)" to prevent some duplicate form submissions
+    // @see http://en.wikipedia.org/wiki/Post/Redirect/Get
     protected function redirect($controller, $action = 'index', $params=array()) {
         $uri = $this->createUri($controller, $action, $params);
-        header($uri);
+        header("Location: " . $uri);
         exit;
     }
     
-    private function createUri($controller, $action = 'index', $params=array()) {
+    private function createUri($controller, $action, $params) {
         $uri = "/$controller/$action";
         if(is_array($params) && count($params) > 0) {
             foreach ($params as $key => $value) {
