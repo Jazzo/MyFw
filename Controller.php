@@ -73,29 +73,36 @@ class MyFw_Controller {
         exit;
     }
 
-
+    /**
+     * Forward and Redirect functions for REQUEST
+     */
 
     protected function forward($controller, $action = 'index', $params=array()) {
         $fc = $this->getFrontController();
-        $fc->setController($controller);
-        $fc->setAction($action);
-        $fc->setParams($params);
-        $cObj = $fc->invokeControllerAction();
-        $cObj->initContent();
-    }
-    
-    protected function redirect($controller, $action = 'index', $params=array()) {
-        $paramsURL = "";
-        if(is_array($params) && count($params) > 0) {
-            foreach ($params as $key => $value) {
-                $paramsURL .= '/' . $key . '/' . $value;
-            }
-        }
-        
-        header('Location: /'.$controller.'/'.$action . $paramsURL);
+        // create a new Router object 
+        $uri = $this->createUri($controller, $action, $params);
+        $r = new MyFw_Router($uri);
+        $fc->setRouter($r);
+        // Run again the _dispatch procedure
+        $fc->run();
         exit;
     }
     
+    protected function redirect($controller, $action = 'index', $params=array()) {
+        $uri = $this->createUri($controller, $action, $params);
+        header($uri);
+        exit;
+    }
+    
+    private function createUri($controller, $action = 'index', $params=array()) {
+        $uri = "/$controller/$action";
+        if(is_array($params) && count($params) > 0) {
+            foreach ($params as $key => $value) {
+                $uri .= '/' . $key . '/' . $value;
+            }
+        }
+        return $uri;
+    }
     
     /**
      * Return a Zend_Controller_Request_Http instance

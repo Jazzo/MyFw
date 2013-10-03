@@ -39,6 +39,11 @@ class MyFw_ControllerFront {
         return self::$instance;
     }
     
+    public function setRouter($router) {
+        $this->_router = $router;
+    }
+    
+    
     public function bootstrap() {
         $bs = new Bootstrap();
         $bs->run();
