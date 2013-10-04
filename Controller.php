@@ -61,18 +61,6 @@ class MyFw_Controller {
         $layout->setContent( $myTpl );
     }
     
-    // init Json Response
-    protected function initJson() {
-        // get default tpl
-        $tpl = $this->getDefaultTpl();
-        $myTpl = $this->view->fetch($tpl);
-        // disable layout
-        $layout = Zend_Registry::get("layout");
-        $layout->disableDisplay();
-        echo json_encode($myTpl);
-        exit;
-    }
-
     /**
      * Forward and Redirect functions for REQUEST
      */
