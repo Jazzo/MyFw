@@ -16,7 +16,9 @@ class MyFw_Layout {
     function __construct() {
         
         $appConfig = Zend_Registry::get('appConfig');
-        $this->tpl = new MyFw_View(array('template_path' => $appConfig->template->path_layout));
+        $vw = new MyFw_View();
+        $vw->addPath('template', $appConfig->template->path_layout);
+        $this->tpl = $vw;
     }
     
     function setContentByName($name, $tpl) {

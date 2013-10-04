@@ -42,10 +42,8 @@ class MyFw_Mail
 
     protected static function getDefaultView()
     {
-        if(self::$_defaultView === null)
-        {
-            $appConfig = Zend_Registry::get('appConfig');
-            self::$_defaultView = new MyFw_View(array('template_path' => $appConfig->template->path_email));
+        if(self::$_defaultView === null) {
+            self::$_defaultView = new MyFw_View();
         }
         return self::$_defaultView;
     }
