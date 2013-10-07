@@ -44,6 +44,8 @@ class MyFw_Mail
     {
         if(self::$_defaultView === null) {
             self::$_defaultView = new MyFw_View();
+            $config = Zend_Registry::get('appConfig');
+            self::$_defaultView->addPath('template', $config->template->path_email);
         }
         return self::$_defaultView;
     }
@@ -64,6 +66,15 @@ class MyFw_Mail
             if(APPLICATION_ENV == "production") {
                 return $this->send();
             } else {
+                // Log Email sent
+                $my_log = "<br /><br />--------------- --------------- ---------------<br />" 
+                        . "Email Inviata alle ". date("H:i:s") . "<br />"
+                        . "From: ".$this->getFrom()." <".$this->getDefaultFrom() . "><br />"
+                        . "Oggetto: " . $this->getSubject() . "<br />---------------<br />"
+                        . $this->getBodyHtml(true) . "<br />";
+                $log = fopen( APPLICATION_PATH . '/tmp/LOG_EMAIL_SENT_' . date("dmY") . '.html','a');
+                fwrite($log,$my_log);
+                fclose($log);
                 return true;
             }
         } catch (Exception $exc) {
