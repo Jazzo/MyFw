@@ -60,6 +60,10 @@ class MyFw_Mail
     public function sendHtmlTemplate($template, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
         $html = $this->_view->fetch($template);
+        // ADD Footer if EXISTS
+        $this->_view->assign('url_environment', Zend_Registry::get('appConfig')->url_environment);
+        $html .= $this->_view->fetch("footer.tpl.php");
+        // Set BODY Email
         $this->setBodyHtml($html);
         $this->setBodyText(strip_tags($html));
         try {
@@ -69,8 +73,9 @@ class MyFw_Mail
                 // Log Email sent
                 $my_log = "<br /><br />--------------- --------------- ---------------<br />" 
                         . "Email Inviata alle ". date("H:i:s") . "<br />"
-                        . "From: ".$this->getFrom()." <".$this->getDefaultFrom() . "><br />"
-                        . "Oggetto: " . $this->getSubject() . "<br />---------------<br />"
+                        . "<b>FROM</b>: ".$this->getFrom()."<br />"
+                        . "<b>TO/CC/CCN</b>: ". implode(", ", $this->getRecipients()). "<br />"
+                        . "<b>OGGETTO</b>: " . $this->getSubject() . "<br />---------------<br />"
                         . $this->getBodyHtml(true) . "<br />";
                 $log = fopen( APPLICATION_PATH . '/tmp/LOG_EMAIL_SENT_' . date("dmY") . '.html','a');
                 fwrite($log,$my_log);
