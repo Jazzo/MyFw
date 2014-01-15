@@ -88,6 +88,11 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
             $html .= ' />';
         }
         
+        // NOTE
+        if(isset($attrs["note"])) {
+            $html .= ' <i>'.$attrs["note"].'</i>';
+        }        
+        
         $html .= ( $type != "hidden") ? '<br />' : '';
         
         // ERRORS message
