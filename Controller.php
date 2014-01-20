@@ -10,10 +10,10 @@ class MyFw_Controller {
     private $_tpl = null;
 
     function __construct() {
-        // call init from subclass
-        $this->_init();
         // init view
         $this->view = Zend_Registry::get("view");
+        // call init from subclass
+        $this->_init();
     }
     
     protected function _init() {}
