@@ -12,7 +12,8 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
                         'rows',
                         'cols',
                         'class',
-                        'onclick'
+                        'onclick',
+                        'placeholder'
     );
 	/**
 	* 
@@ -71,6 +72,16 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
             if(isset($attrs[$attribute])) {
                 $html .= ' '.$attribute.'="'.$attrs[$attribute].'"';
             }
+        }
+        
+        // DISABLED
+        if(isset($attrs["disabled"]) && $attrs["disabled"] === true) {
+            $html .= ' disabled';
+        }
+
+        // READONLY
+        if(isset($attrs["readonly"]) && $attrs["readonly"] === true) {
+            $html .= ' readonly';
         }
         
         // set VALUE if it's defined by attributes
