@@ -32,7 +32,7 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         $html = "";
         
         // init TYPE Default Value: INPUT
-        $type = isset($attrs["type"]) ? $attrs["type"] : "input";
+        $type = isset($attrs["type"]) ? $attrs["type"] : "text";
 
         // init ID Default Value: INPUT
         if(!isset($attrs["id"])) {
@@ -46,9 +46,10 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         }
         
         // set LABEL
-        if( $type != "hidden") {
-            $label = isset($attrs["label"]) ? $attrs["label"] : "Set Label...";
-    		$html .= '<label for="'.$name.'">'.$label.':</label>'; // TODO: improve it with more kind of labels...
+        if( $type != "hidden" && isset($attrs["label"])) 
+        {
+        //    $label = isset($attrs["label"]) ? $attrs["label"] : "Set Label...";
+    		$html .= '<label for="'.$name.'">'.$attrs["label"].':</label>'; // TODO: improve it with more kind of labels...
         }
         
         // set TYPE (manage also textarea)
