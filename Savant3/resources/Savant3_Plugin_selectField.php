@@ -58,6 +58,11 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
             }
         }
         
+        // REQUIRED
+        if(isset($attrs["required"]) && $attrs["required"] === true) {
+            $html .= ' required';
+        }
+
         // CLOSE SELECT tag
         $html .= '>';
 

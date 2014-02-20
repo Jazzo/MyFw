@@ -75,6 +75,11 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
             }
         }
         
+        // REQUIRED
+        if(isset($attrs["required"]) && $attrs["required"] === true) {
+            $html .= ' required';
+        }
+        
         // DISABLED
         if(isset($attrs["disabled"]) && $attrs["disabled"] === true) {
             $html .= ' disabled';
