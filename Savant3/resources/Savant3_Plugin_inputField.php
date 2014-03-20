@@ -13,7 +13,9 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
                         'cols',
                         'class',
                         'onclick',
-                        'placeholder'
+                        'placeholder',
+                        'pattern',
+                        'step'
     );
 	/**
 	* 
