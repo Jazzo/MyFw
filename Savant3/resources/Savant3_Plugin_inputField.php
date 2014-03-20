@@ -109,7 +109,7 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         
         // NOTE
         if(isset($attrs["note"])) {
-            $html .= ' <i>'.$attrs["note"].'</i>';
+            $html .= ' <span id="np_'.$name.'">'.$attrs["note"].'</span>';
         }        
         
         $html .= ( $type != "hidden") ? '<br />' : '';
