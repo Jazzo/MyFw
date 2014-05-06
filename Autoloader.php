@@ -19,7 +19,7 @@ class Autoloader
 
     private static function verifyClassExists($pOFP)
     {
-        $arPaths = explode(":", get_include_path());
+        $arPaths = explode(PATH_SEPARATOR, get_include_path());
         if(count($arPaths) > 0)
         {
             foreach($arPaths AS $path)
