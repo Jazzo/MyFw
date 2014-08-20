@@ -202,5 +202,37 @@ class MyFw_Form {
         }        
     }
         
+
+/*
+ * MISCELLANEOUS
+ */
+    
+    function setFieldDateTime_View($field, $d)
+    {
+        $dt = new Zend_Date($d, "YYYY-MM-dd HH:mm:ss");
+        $value = $dt->toString("dd/MM/YYYY HH:mm");
+        $this->setValue($field, $value);
+    }
+    
+    function setFieldDateTime_Save($field, $d)
+    {
+        $dt = new Zend_Date($d, "dd/MM/YYYY HH:mm");
+        $value = $dt->toString("YYYY-MM-dd HH:mm:ss");
+        $this->setValue($field, $value);
+    }
+    
+    function setFieldDate_View($field, $d)
+    {
+        $dt = new Zend_Date($d, "YYYY-MM-dd");
+        $value = $dt->toString("dd/MM/YYYY");
+        $this->setValue($field, $value);
+    }
+    
+    function setFieldDate_Save($field, $d)
+    {
+        $dt = new Zend_Date($d, "dd/MM/YYYY");
+        $value = $dt->toString("YYYY-MM-dd");
+        $this->setValue($field, $value);
+    }
     
 }
