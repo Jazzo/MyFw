@@ -19,7 +19,11 @@ class MyFw_DB_Base {
         $arRes = array();
         if(count($ar) > 0) {
             foreach($ar AS $k => $val) {
-                $arRes[$val[$fKey]] = $val[$fVal];
+                if(is_array($val)) {
+                    $arRes[$val[$fKey]] = $val[$fVal];
+                } else if(is_object($val)) {
+                    $arRes[$val->$fKey] = $val->$fVal;
+                }
             }
         }
         return $arRes;
