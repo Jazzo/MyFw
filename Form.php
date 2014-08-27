@@ -20,119 +20,112 @@ class MyFw_Form {
     }
     
     // overwrite it in the subclasses
-    function createFields() { }
+    protected function createFields() { }
 
-    function getFields() {
+    public function addField($name, $attrs = array()) {
+        $this->_fields[$name] = new MyFw_Form_Field($name, $attrs);
+    }
+            
+    public function getFields() {
         return $this->_fields;
     }
     
-    function getFieldByAttr($at, $val) {
+    public function getField($name) {
+        return $this->_fields[$name];
+    }
+    
+    public function getFieldByAttr($attr, $val) {
         if(count($this->_fields) > 0) {
             $fields = array();
-            foreach( $this->_fields AS $name => $attrs) {
-                if( isset($attrs[$at]) && $attrs[$at] == $val) {
-                    $fields[$name] = $attrs;
+            foreach( $this->_fields AS $name => $fieldObj) {
+                if( $fieldObj->hasAttribute($attr) && $fieldObj->getAttribute($attr) == $val) {
+                    $fields[$name] = $fieldObj;
                 }
             }
         }
         return (count($fields) > 0) ? $fields : null;
     }
 
-    function addField($name, $attrs = array()) {
-        $this->_fields[$name] = $attrs;
-    }
-    
-    function removeField($name) {
+    public function removeField($name) {
         unset($this->_fields[$name]);
     }
     
-    function setAction($act) {
+    public function setAction($act) {
         $this->_action = $act;
     }
     
-    function getAction() {
+    public function getAction() {
         return $this->_action;
     }
     
-    function setValues($arVal) {
+    public function setValues($arVal) {
         if(count($this->_fields) > 0) {
-            foreach( $this->_fields AS $name => &$attrs) {
+            foreach( $this->_fields AS $name => &$fieldObj) 
+            {
                 // set Values for ARRAY
-                if(is_array($arVal)) {
-                    if( isset($arVal[$name])) {
-                        $attrs["value"] = $arVal[$name];
-                    }
+                if(is_array($arVal) && isset($arVal[$name])) {
+                    $fieldObj->setValue($arVal[$name]);
                 }
                 // set Values for OBJECT
-                if(is_object($arVal)) {
-                    if( isset($arVal->$name)) {
-                        $attrs["value"] = $arVal->$name;
-                    }
+                if(is_object($arVal) && isset($arVal->$name)) {
+                    $fieldObj->setValue($arVal->$name);
                 }
             }
         }
     }
     
-    function setValue($field, $value) {
-        $this->_fields[$field]["value"] = $value;
+    public function setValue($field, $value) {
+        $this->_fields[$field]->setValue($value);
     }
 
-    function getValue($field) {
-        return $this->_fields[$field]["value"];
+    public function getValue($field) {
+        return $this->_fields[$field]->getValue();
+    }
+
+    public function getUnfilteredValue($field) {
+        return $this->_fields[$field]->getUnfilteredValue();
     }
     
-    function getValues() {
+    public function getValues() {
         $values = array();
         if(count($this->_fields) > 0) {
-            foreach( $this->_fields AS $name => $attrs) {
-                $values[$name] = $attrs["value"];
+            foreach( $this->_fields AS $name => $fieldObj) {
+                $values[$name] = $fieldObj->getValue();
             }
         }
         return $values;
     }
 
-    function setOptions($field, array $options) {
-        $this->_fields[$field]["options"] = $options;
-    }
-    
-    
-    function setRequired($field) {
-        $this->_fields[$field]["required"] = true;
-    }
-    
-    function setError($field, $msg=true) {
-        $this->_fields[$field]["error"] = $msg;
+    public function setError($field, $msg=true) {
+        $this->_fields[$field]->setError($msg);
         $this->_hasErrors = true;
     }
     
-    function hasErrors() {
+    public function hasErrors() {
         return $this->_hasErrors;
     }
     
-    function isValid($values) {
+    public function isValid($values) {
         if(count($this->_fields) > 0) {
-            foreach( $this->_fields AS $name => &$attrs) {
+            foreach( $this->_fields AS $name => &$fieldObj) {
 
-                // set VALUE in array
+                // set VALUE in field
                 if(isset($values[$name])) {
-                    $attrs["value"] = $values[$name];
+                    $fieldObj->setValue($values[$name]);
                 }
-
+                
                 // check VALIDATORS
-                if(isset($attrs["validators"])) {
+                if($fieldObj->hasValidators()) {
                     $error = $this->validate($name);
                     if($error !== false) {
-                        $attrs["error"] = $error;
-                        $this->_hasErrors = true;
+                        $this->setError($name, $error);
                     }
-                }                
+                }
 
                 // check REQUIRED
-                if(isset($attrs["required"]) && $attrs["required"] === true) {
-                //echo "Field: $field<br>";
+                if($fieldObj->isRequired()) {
                     if(!isset($values[$name]) || $values[$name] == "") {
-                        $attrs["error"] = true;
-                        $this->_hasErrors = true;
+                        $this->setError($name, true);
                     }
                 }
             }
@@ -142,97 +135,27 @@ class MyFw_Form {
         return ($this->hasErrors()) ? false : true;
     }
     
-    
-    
-
-    function renderField($fieldName) {
+    public function renderField($fieldName) {
         if(isset($this->_fields[$fieldName])) {
-            if(isset($this->_fields[$fieldName]["type"])) {
-                switch ($this->_fields[$fieldName]["type"]) {
-                    case "select":
-                        return $this->view->selectField($fieldName, $this->_fields[$fieldName]);
+            switch ($this->_fields[$fieldName]->getAttribute("type")) {
+                case "select":
+                    return $this->view->selectField($fieldName, $this->_fields[$fieldName]->getArrayAttributes());
 
-                        break;
+                case "checkbox":
+                    return $this->view->checkboxField($fieldName, $this->_fields[$fieldName]->getArrayAttributes());
 
-                    case "checkbox":
-                        return $this->view->checkboxField($fieldName, $this->_fields[$fieldName]);
-
-                        break;
-
-                    case "submit":
-                    case "captcha":
-                        return "";
-                        break;
-
-                    default:
-                    case "input":
-                    case "textarea":
-                    case "hidden":
-                        return $this->view->inputField($fieldName, $this->_fields[$fieldName]);
-                        break;
-                }
-            } else {
-                // Default Type: INPUT TEXT
-                return $this->view->inputField($fieldName, $this->_fields[$fieldName]);
-            }
-        }
-    }
-    
-    
-    
-    private function validate($name) {
-        
-        $validators = $this->_fields[$name]["validators"];
-        $value = $this->_fields[$name]["value"];
-        
-        foreach ($validators as $key => $validator) {
-            
-            switch ($validator) {
-                case "Number":
-                        $value = str_replace(",", ".", $value);
-                    
-                        $this->_fields[$name]["value"] = (double)$value;
-                        return is_numeric($value) ? false : "Deve essere in formato numerico. Es: 12,45 o 12.45 (usa la virgola o il punto per i decimali)";
-                    break;
+                case "submit":
+                case "captcha":
+                    return "";
 
                 default:
-                        return false;
-                    break;
+                case "input":
+                case "textarea":
+                case "hidden":
+                    return $this->view->inputField($fieldName, $this->_fields[$fieldName]->getArrayAttributes());
             }
-        }        
-    }
-        
-
-/*
- * MISCELLANEOUS
- */
-    
-    function setFieldDateTime_View($field, $d)
-    {
-        $dt = new Zend_Date($d, "YYYY-MM-dd HH:mm:ss");
-        $value = $dt->toString("dd/MM/YYYY HH:mm");
-        $this->setValue($field, $value);
-    }
-    
-    function setFieldDateTime_Save($field, $d)
-    {
-        $dt = new Zend_Date($d, "dd/MM/YYYY HH:mm");
-        $value = $dt->toString("YYYY-MM-dd HH:mm:ss");
-        $this->setValue($field, $value);
-    }
-    
-    function setFieldDate_View($field, $d)
-    {
-        $dt = new Zend_Date($d, "YYYY-MM-dd");
-        $value = $dt->toString("dd/MM/YYYY");
-        $this->setValue($field, $value);
-    }
-    
-    function setFieldDate_Save($field, $d)
-    {
-        $dt = new Zend_Date($d, "dd/MM/YYYY");
-        $value = $dt->toString("YYYY-MM-dd");
-        $this->setValue($field, $value);
+        }
+        return "";
     }
     
 }
