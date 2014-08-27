@@ -6,7 +6,7 @@
  * 
  * @author gullo
  */
-include_once 'Savant3.php';
+include_once 'Savant3/Savant3.php';
 class MyFw_View extends Savant3 {
     
     function __construct($config = null) {
