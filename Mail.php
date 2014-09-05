@@ -82,14 +82,8 @@ class MyFw_Mail
                 fclose($log);
                 return true;
             }
-        } catch (Exception $exc) {
-            return false;
-           /*
-            * TODO: Catch Error and do something....
-            echo "<pre>";
-            echo $exc->getMessage();
-            echo "</pre>";die;
-            */
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
         }
     }
 

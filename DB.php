@@ -43,7 +43,7 @@ class MyFw_DB extends PDO {
             echo "<pre>";
             die; */
         } else {
-            throw new Exception("SQL UPDATE ERROR: No Fields!");
+            throw new MyFw_Exception("SQL UPDATE ERROR: No Fields!");
         }
         
     }
@@ -70,7 +70,7 @@ class MyFw_DB extends PDO {
             echo "<pre>";
             die; */
         } else {
-            throw new Exception("SQL UPDATE ERROR: No Fields!");
+            throw new MyFw_Exception("SQL UPDATE ERROR: No Fields!");
         }
         
     }

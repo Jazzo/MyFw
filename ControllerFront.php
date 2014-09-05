@@ -34,7 +34,7 @@ class MyFw_ControllerFront {
     // SINGLETON
     static public function getInst() {
         if( is_null(self::$instance) ) {
-            throw new Exception("You need to create the FIRST INSTANCE of ControllerFront!");
+            throw new MyFw_Exception("You need to create the FIRST INSTANCE of ControllerFront!");
         }
         return self::$instance;
     }
@@ -93,7 +93,7 @@ class MyFw_ControllerFront {
         if($cObj instanceof MyFw_Controller) {
             $cObj->initContent();
         } else {
-            throw new Exception("ERROR: Controller is NOT an object!");
+            throw new MyFw_Exception("ERROR: Controller is NOT an object!");
         }
     }
     
@@ -112,8 +112,8 @@ class MyFw_ControllerFront {
                     return $controllerObj;
                 }
             }
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+        } catch (MyFw_Exception $exc) {
+            $exc->displayError();
         }
 
         // ERROR 404

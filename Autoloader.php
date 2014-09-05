@@ -13,7 +13,7 @@ class Autoloader
         if (self::verifyClassExists($pObjectFilePath)) {
             require_once $pObjectFilePath;
         } else {
-            throw new Zend_Exception("ERRORE: $pObjectFilePath NON esiste!");
+            throw new MyFw_Exception("The class $pObjectFilePath NON esiste!");
         }
     }
 

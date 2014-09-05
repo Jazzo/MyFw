@@ -30,7 +30,7 @@ class MyFw_Form_Filters_Date extends MyFw_Form_Filters_Abstract
             } else if(strlen($value) == 19) {
                 $inputFormat = self::_MYFORMAT_DATETIME_VIEW;
             } else {
-                throw new Exception("Invalid Date format in MyFw_Form_Filters_Date!");
+                throw new MyFw_Exception("Invalid Date format in MyFw_Form_Filters_Date!");
             }
             $dt = new Zend_Date($value, $inputFormat);
             return $dt->toString($format);
