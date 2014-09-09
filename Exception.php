@@ -15,10 +15,12 @@ class MyFw_Exception extends Exception
     // custom string representation of object
     public function __toString() {
 
-        echo "<h1>ERRORE: ".$this->getMessage()."</h1>";
-        echo "CODE: ".$this->getCode()."<br>";
-        echo "Stack Trace: <pre>".$this->getTraceAsString()."</pre>";
-        return __CLASS__ . ": [{$this->code}]: --> {$this->message} <--";
+        $str = "<h1>ERRORE: ".$this->getMessage()."</h1>";
+        $str .= "CODE: ".$this->getCode()."<br>";
+        $str .= "FILE: ".$this->getFile()."<br>";
+        $str .= "LINE: ".$this->getLine()."<br>";
+        $str .= "Stack Trace: <pre>".$this->getTraceAsString()."</pre>";
+        return $str;
     }
 
     public function displayError($stop=true) {
