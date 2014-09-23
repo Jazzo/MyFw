@@ -49,7 +49,7 @@ class MyFw_Router {
             $controller = $pcs[0];
             $act = ( isset($pcs[1]) && $pcs[1] != "") ? $pcs[1] : "index";
             // remove query string from action
-            $act = str_replace($_SERVER["QUERY_STRING"], "", $act);
+            $act = str_replace(filter_input(INPUT_SERVER, "QUERY_STRING"), "", $act);
             if(substr($act, -1) == "?") {
                 $action = substr($act, 0, -1);
             } else {
@@ -73,7 +73,7 @@ class MyFw_Router {
      * Set Vars by QUERY STRING
      */
         $oAr = array();
-        parse_str($_SERVER['QUERY_STRING'], $oAr);
+        parse_str(filter_input(INPUT_SERVER, "QUERY_STRING"), $oAr);
         if(count($oAr) > 0 ) {
             foreach($oAr AS $vName => $vVal) {
                 $this->_params[$vName] = $vVal;

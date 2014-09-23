@@ -28,7 +28,8 @@ class MyFw_ControllerFront {
         self::$instance = $this;
 
         // start Router class
-        $this->_router = new MyFw_Router($_SERVER["REQUEST_URI"]);
+        $this->_router = new MyFw_Router(filter_input(INPUT_SERVER, "REQUEST_URI"));
+        
     }
     
     // SINGLETON
