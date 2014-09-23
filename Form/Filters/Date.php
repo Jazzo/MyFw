@@ -7,10 +7,10 @@
  */
 class MyFw_Form_Filters_Date extends MyFw_Form_Filters_Abstract
 {
-    const _MYFORMAT_DATE_DB = "YYYY-MM-dd";
-    const _MYFORMAT_DATETIME_DB = "YYYY-MM-dd HH:mm:ss";
-    const _MYFORMAT_DATE_VIEW = "dd/MM/YYYY";
-    const _MYFORMAT_DATETIME_VIEW = "dd/MM/YYYY HH:mm";
+    const _MYFORMAT_DATE_DB = "Y-m-d";
+    const _MYFORMAT_DATETIME_DB = "Y-m-d H:i:s";
+    const _MYFORMAT_DATE_VIEW = "d/m/Y";
+    const _MYFORMAT_DATETIME_VIEW = "d/m/Y H:i";
     
     static public function filter($value, array $params=array()) {
         
@@ -32,8 +32,8 @@ class MyFw_Form_Filters_Date extends MyFw_Form_Filters_Abstract
             } else {
                 throw new MyFw_Exception("Invalid Date format in MyFw_Form_Filters_Date!");
             }
-            $dt = new Zend_Date($value, $inputFormat);
-            return $dt->toString($format);
+            $dt = DateTime::createFromFormat($inputFormat, $value);
+            return $dt->format($format);
         }
     }
     
