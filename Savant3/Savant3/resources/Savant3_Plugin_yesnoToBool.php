@@ -14,4 +14,3 @@ class Savant3_Plugin_yesnoToBool extends Savant3_Plugin {
 	}
 
 }
-?>

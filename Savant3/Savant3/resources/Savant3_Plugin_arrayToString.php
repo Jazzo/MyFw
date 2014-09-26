@@ -1,17 +1,11 @@
 <?php
 
-class Savant3_Plugin_yesnoToBool extends Savant3_Plugin {
+class Savant3_Plugin_arrayToString extends Savant3_Plugin {
 	
 	
-	function yesnoToBool($val)
+	function arrayToString(array $ar, $noVal="Nessuno")
 	{
-		// convert value S,Y on  and N on NO
-		if (trim($val) == 'Y' OR trim($val) == 'S') {
-			return true;
-		} else {
-			return false;
-		}
+        echo (count($ar) > 0) ? implode(", ", $ar) : $noVal;
 	}
 
 }
-?>
