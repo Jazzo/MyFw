@@ -28,16 +28,9 @@ class MyFw_DB extends PDO {
     function makeUpdate($tableName, $idFieldName, $fields) {
         
         if(count($fields) > 0) {
-            $sql = "UPDATE $tableName SET";
-            foreach ($fields as $field => $value) {
-                if( $field != $idFieldName ) {
-                    $sql .= " $field= :$field,";
-                }
-            }
-            $sql = substr($sql, 0, -1);
-            $sql .= " WHERE $idFieldName= :$idFieldName";
-            $sth = $this->prepare($sql);
+            $sth = $this->prepareUpdateQueryByParams($tableName, $idFieldName, $fields);
             $sth->execute($fields);
+            echo $sth->errorCode()."--<br>";
 /*            echo "<pre>";
             Zend_Debug::dump($sth->errorCode());
             echo "<pre>";
@@ -45,7 +38,33 @@ class MyFw_DB extends PDO {
         } else {
             throw new MyFw_Exception("SQL UPDATE ERROR: No Fields!");
         }
-        
+    }
+    
+    /**
+     * @return PDOStatement
+     */    
+    function prepareUpdateQueryByParams($tableName, $idFieldName, $fields)
+    {
+        if(count($fields) > 0) {
+            $sql = "UPDATE $tableName SET";
+            foreach ($fields as $field => $value) {
+                if( $field != $idFieldName ) {
+                    $sql .= " $field= :$field,";
+                }
+            }
+            $sql = substr($sql, 0, -1);
+            $sql .= " WHERE ";
+            if(is_string($idFieldName)) {
+                $sql .= "$idFieldName= :$idFieldName";
+            } else if(is_array($idFieldName) && count($idFieldName) > 0) {
+                foreach ($idFieldName as $key => $fieldName) {
+                    $sql .= "$fieldName= :$fieldName AND ";
+                }
+                $sql = substr($sql, 0, -4);
+            }
+            return $this->prepare($sql);
+        }
+        return null;
     }
     
 /**
@@ -57,12 +76,7 @@ class MyFw_DB extends PDO {
     function makeInsert($tableName, $fields) {
         
         if(count($fields) > 0) {
-            $sql = "INSERT $tableName SET";
-            foreach ($fields as $field => $value) {
-                $sql .= " $field= :$field,";
-            }
-            $sql = substr($sql, 0, -1);
-            $sth = $this->prepare($sql);
+            $sth = $this->prepareInsertQueryByParams($tableName, $fields);
             $sth->execute($fields);
             return $this->lastInsertId();
 /*            echo "<pre>";
@@ -72,7 +86,22 @@ class MyFw_DB extends PDO {
         } else {
             throw new MyFw_Exception("SQL UPDATE ERROR: No Fields!");
         }
-        
+    }
+    
+    /**
+     * @return PDOStatement
+     */
+    function prepareInsertQueryByParams($tableName, $fields)
+    {
+        if(count($fields) > 0) {
+            $sql = "INSERT $tableName SET";
+            foreach ($fields as $field => $value) {
+                $sql .= " $field= :$field, ";
+            }
+            $sql = substr($sql, 0, -2);
+            return $this->prepare($sql);
+        }
+        return null;
     }
     
 }
