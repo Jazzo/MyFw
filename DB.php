@@ -24,14 +24,15 @@ class MyFw_DB extends PDO {
  *  @param $tableName string
  *  @param $idFieldName mixed (string|array)
  *  @param $fields array
+ *  @return bool
  */    
     function makeUpdate($tableName, $idFieldName, $fields) {
         
         if(count($fields) > 0) {
             $sth = $this->prepareUpdateQueryByParams($tableName, $idFieldName, $fields);
-            $sth->execute($fields);
-            echo $sth->errorCode()."--<br>";
-/*            echo "<pre>";
+            return $sth->execute($fields);
+/*            echo $sth->errorCode()."--<br>";
+            echo "<pre>";
             Zend_Debug::dump($sth->errorCode());
             echo "<pre>";
             die; */
