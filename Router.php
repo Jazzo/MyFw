@@ -10,6 +10,7 @@ class MyFw_Router {
     private $_controller;
     private $_action;
     private $_params;
+    private $_fragment;
 
 
     function  __construct($uri) {
@@ -28,66 +29,69 @@ class MyFw_Router {
     function getParams() {
         return $this->_params;
     }
+    
+    function getFragment() {
+        return $this->_fragment;
+    }
 
     private function _router() {
 
-        // remove first slash /
-        $uri = substr($this->_uri, 1);
-    /*
-     * set Controller and Action
-     */
+        // get the PATH from URL
+        $path = parse_url($this->_uri, PHP_URL_PATH);
+
         // Set Default Values
         $controller = "index";
         $action = "index";
-
+        
         // TRY to set values by REQUEST_URI
-        $pcs = explode("/", $uri);
+        $pcs = explode("/", substr($path, 1));// remove first slash /
+
         if( is_array($pcs) &&
             count($pcs) > 0 &&
             $pcs[0] != ""
         ) {
             $controller = $pcs[0];
-            $act = ( isset($pcs[1]) && $pcs[1] != "") ? $pcs[1] : "index";
-            // remove query string from action
-            $act = str_replace(filter_input(INPUT_SERVER, "QUERY_STRING"), "", $act);
-            if(substr($act, -1) == "?") {
-                $action = substr($act, 0, -1);
-            } else {
-                $action = $act;
-            }
+            $action = ( isset($pcs[1]) && $pcs[1] != "") ? $pcs[1] : "index";
         }
-
-    /*
-     * Set Vars
-     */
+        
+        // get some VARS in the PATH
+        $params = array();
         if(count($pcs) > 2) {
             for($i=2; $i <= count($pcs) ; $i++) {
                 if( isset($pcs[$i]) && isset($pcs[$i+1]) ) {
-                    $this->_params[$pcs[$i]] = $pcs[$i+1];
+                    $params[$pcs[$i]] = $this->filterParamValue($pcs[$i+1]);
                     $i++;
                 }
             }
         }
-        
-    /*
-     * Set Vars by QUERY STRING
-     */
+
+        // get Vars by QUERY STRING
         $oAr = array();
-        parse_str(filter_input(INPUT_SERVER, "QUERY_STRING"), $oAr);
+        parse_str(parse_url($this->_uri, PHP_URL_QUERY), $oAr);
         if(count($oAr) > 0 ) {
             foreach($oAr AS $vName => $vVal) {
-                $this->_params[$vName] = $vVal;
+                $params[$vName] = $this->filterParamValue($vVal);
             }
         }
-
+        
     /*
      * Capitalize some letters of Controllers and Actions
      */
         $this->_controller = $this->capitalizeController($controller);
         $this->_action = $this->capitalizeAction($action);
+        $this->_params = $params;
+        $this->_fragment = parse_url($this->_uri, PHP_URL_FRAGMENT);
         //echo "<br>Controller: ". $this->_controller;
         //echo "<br>Action: ". $this->_action;
-        
+    }
+    
+    private function filterParamValue($p)
+    {
+        if($p == "true" || $p == "false" || $p == "TRUE" || $p == "FALSE")
+        {
+            return (bool)$p; 
+        }
+        return $p;
     }
 
     private function capitalizeController($t) {
