@@ -62,6 +62,17 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
         if(isset($attrs["required"]) && $attrs["required"] === true) {
             $html .= ' required';
         }
+        
+        // DISABLED
+        if(isset($attrs["disabled"]) && $attrs["disabled"] === true) {
+            $html .= ' disabled';
+        }
+
+        // READONLY
+        if(isset($attrs["readonly"]) && $attrs["readonly"] === true) {
+            $html .= ' readonly';
+        }
+        
 
         // CLOSE SELECT tag
         $html .= '>';

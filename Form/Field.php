@@ -39,6 +39,11 @@ class MyFw_Form_Field {
         return ($this->hasAttribute($attr)) ? $this->_attrs[$attr] : null;
     }
     
+    public function setAttribute($attr, $value)
+    {
+        $this->_attrs[$attr] = $value;
+    }
+    
     public function setValue($val)
     {
         $this->_attrs["value"] = $val;

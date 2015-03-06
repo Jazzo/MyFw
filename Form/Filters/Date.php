@@ -27,7 +27,7 @@ class MyFw_Form_Filters_Date extends MyFw_Form_Filters_Abstract
         // try to get input parameter
             if(strlen($value) == 10 ) {
                 $inputFormat = self::_MYFORMAT_DATE_VIEW;
-            } else if(strlen($value) == 19) {
+            } else if(strlen($value) == 16) {
                 $inputFormat = self::_MYFORMAT_DATETIME_VIEW;
             } else {
                 throw new MyFw_Exception("Invalid Date format in MyFw_Form_Filters_Date!");
