@@ -89,7 +89,7 @@ class MyFw_Router {
     {
         if($p == "true" || $p == "false" || $p == "TRUE" || $p == "FALSE")
         {
-            return (bool)$p; 
+            return filter_var($p, FILTER_VALIDATE_BOOLEAN);
         }
         return $p;
     }
