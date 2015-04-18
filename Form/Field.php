@@ -76,9 +76,21 @@ class MyFw_Form_Field {
         return (isset($this->_attrs["required"]) && $this->_attrs["required"] === true);
     }
     
-    public function setRequired() {
+    public function setRequired() 
+    {
         $this->_attrs["required"] = true;
     }
+    
+    public function isDisabled()
+    {
+        return (isset($this->_attrs["disabled"]) && $this->_attrs["disabled"] === true);
+    }
+    
+    public function setDisabled() 
+    {
+        $this->_attrs["disabled"] = true;
+    }
+
     
     public function setError($msg=true) {
         $this->_attrs["error"] = $msg;

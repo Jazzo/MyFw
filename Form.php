@@ -108,24 +108,26 @@ class MyFw_Form {
     public function isValid($values) {
         if(count($this->_fields) > 0) {
             foreach( $this->_fields AS $name => &$fieldObj) {
-
-                // set VALUE in field
-                if(isset($values[$name])) {
-                    $fieldObj->setValue($values[$name]);
-                }
-                
-                // check VALIDATORS
-                if($fieldObj->hasValidators()) {
-                    $error = $this->validate($name);
-                    if($error !== false) {
-                        $this->setError($name, $error);
+                if(!$fieldObj->isDisabled())
+                {
+                    // set VALUE in field
+                    if(isset($values[$name])) {
+                        $fieldObj->setValue($values[$name]);
                     }
-                }
 
-                // check REQUIRED
-                if($fieldObj->isRequired()) {
-                    if(!isset($values[$name]) || $values[$name] == "") {
-                        $this->setError($name, true);
+                    // check VALIDATORS
+                    if($fieldObj->hasValidators()) {
+                        $error = $this->validate($name);
+                        if($error !== false) {
+                            $this->setError($name, $error);
+                        }
+                    }
+
+                    // check REQUIRED
+                    if($fieldObj->isRequired()) {
+                        if(!isset($values[$name]) || $values[$name] == "") {
+                            $this->setError($name, true);
+                        }
                     }
                 }
             }

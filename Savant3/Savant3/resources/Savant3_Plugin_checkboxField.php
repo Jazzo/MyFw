@@ -36,8 +36,10 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
         }
         
         // set LABEL
-        $label = isset($attrs["label"]) ? $attrs["label"] : "Set Label...";
-        $html .= '<label for="'.$name.'">'.$label.':</label>'; // TODO: improve it with more kind of labels...
+        if(isset($attrs["label"])) 
+        {
+            $html .= '<label for="'.$name.'">'.$attrs["label"].':</label>'; // TODO: improve it with more kind of labels...
+        }
         
         // set VALUE if it's defined by attributes
         $value = null;
@@ -54,15 +56,8 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
             if(count($attrs["options"]) > 0 ) {
                 foreach ($attrs["options"] as $optKey => $optVal) {
                     
-                    // set NAME
-                    if(isset($attrs["set_array"])) {
-                        $name = $attrs["set_array"].'['.$optKey.']';
-                    } else {
-                        $name = $optKey;
-                    }
-                    
                     // SET Default HTML
-                    $html .= '<input type="checkbox" value="Y" name="'.$name.'"';
+                    $html .= '<input type="checkbox" value="'.$optKey.'" name="'.$name.'[]"';
                     
                     // set OTHER ATTRIBUTES 
                     foreach ($this->_attr_other AS $attribute) {
@@ -73,11 +68,14 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
                     
                     // SET selected
                     if(isset($value) && is_array($value) && count($value) > 0) {
-                        foreach ($value AS $key => $val) {
-                            if($optKey == $key) {
+                        if(in_array($optKey, $value)) {
                                 $html .= " checked";
-                            }
                         }
+                    }
+                    
+                    // SET DISABLED
+                    if(isset($attrs["disabled"]) && $attrs["disabled"] === true) {
+                        $html .= " disabled";
                     }
 
                     // CLOSE SELECT tag
