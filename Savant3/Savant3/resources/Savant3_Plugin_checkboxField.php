@@ -38,7 +38,7 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
         // set LABEL
         if(isset($attrs["label"])) 
         {
-            $html .= '<label for="'.$name.'">'.$attrs["label"].':</label>'; // TODO: improve it with more kind of labels...
+            $html .= '<label for="'.htmlspecialchars($name).'">'.htmlspecialchars($attrs["label"]).':</label>'; // TODO: improve it with more kind of labels...
         }
         
         // set VALUE if it's defined by attributes
@@ -57,12 +57,12 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
                 foreach ($attrs["options"] as $optKey => $optVal) {
                     
                     // SET Default HTML
-                    $html .= '<input type="checkbox" value="'.$optKey.'" name="'.$name.'[]"';
+                    $html .= '<input type="checkbox" value="'.htmlspecialchars($optKey).'" name="'.htmlspecialchars($name).'[]"';
                     
                     // set OTHER ATTRIBUTES 
                     foreach ($this->_attr_other AS $attribute) {
                         if(isset($attrs[$attribute])) {
-                            $html .= ' '.$attribute.'="'.$attrs[$attribute].'"';
+                            $html .= ' '.htmlspecialchars($attribute).'="'.htmlspecialchars($attrs[$attribute]).'"';
                         }
                     }
                     
@@ -79,12 +79,12 @@ class Savant3_Plugin_checkboxField extends Savant3_Plugin {
                     }
 
                     // CLOSE SELECT tag
-                    $html .= ' /> '.$optVal.'<br />';
+                    $html .= ' /> '.htmlspecialchars($optVal).'<br />';
                 }
             }
         } else {
             // SET SINGLE CHECKBOX
-            $html .= '<input type="checkbox" value="'.$value.'" name="'.$name.'"';
+            $html .= '<input type="checkbox" value="'.htmlspecialchars($value).'" name="'.htmlspecialchars($name).'"';
             // CLOSE SELECT tag
             $html .= ' /><br />';
         }

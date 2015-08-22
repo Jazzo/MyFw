@@ -28,7 +28,7 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
         
         // init ID Default Value: INPUT
         if(!isset($attrs["id"])) {
-            $attrs["id"] = $name;
+            $attrs["id"] = htmlspecialchars($name);
         }
         
         // check if ERRORS exists
@@ -39,22 +39,22 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
         
         // set LABEL
         $label = isset($attrs["label"]) ? $attrs["label"] : "Set Label...";
-        $html .= '<label for="'.$name.'">'.$label.':</label>'; // TODO: improve it with more kind of labels...
+        $html .= '<label for="'.htmlspecialchars($name).'">'.htmlspecialchars($label).':</label>'; // TODO: improve it with more kind of labels...
         
         // set SELECT
         $html .= '<select ';
         
         // set NAME
         if(isset($attrs["set_array"])) {
-            $html .= ' name="'.$attrs["set_array"].'['.$name.']"';
+            $html .= ' name="'.htmlspecialchars($attrs["set_array"]).'['.htmlspecialchars($name).']"';
         } else {
-            $html .= ' name="'.$name.'"';
+            $html .= ' name="'.htmlspecialchars($name).'"';
         }
         
         // set OTHER ATTRIBUTES 
         foreach ($this->_attr_other AS $attribute) {
             if(isset($attrs[$attribute])) {
-                $html .= ' '.$attribute.'="'.$attrs[$attribute].'"';
+                $html .= ' '.$attribute.'="'.htmlspecialchars($attrs[$attribute]).'"';
             }
         }
         
@@ -89,7 +89,7 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
             if(count($attrs["options"]) > 0 ) {
                 foreach ($attrs["options"] as $optKey => $optVal) {
                     $selected = ($optKey == $value) ? " selected" : ""; 
-                    $html .= '<option value="'.$optKey.'"'.$selected.'>'.$optVal.'</option>';
+                    $html .= '<option value="'.htmlspecialchars($optKey).'"'.$selected.'>'.htmlspecialchars($optVal).'</option>';
                 }
             }
         }
@@ -114,4 +114,3 @@ class Savant3_Plugin_selectField extends Savant3_Plugin {
 		return $html;
 	}
 }
-?>

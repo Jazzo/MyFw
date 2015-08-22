@@ -51,7 +51,7 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         if( $type != "hidden" && isset($attrs["label"])) 
         {
         //    $label = isset($attrs["label"]) ? $attrs["label"] : "Set Label...";
-    		$html .= '<label for="'.$name.'">'.$attrs["label"].':</label>'; // TODO: improve it with more kind of labels...
+    		$html .= '<label for="'.htmlspecialchars($name).'">'.htmlspecialchars($attrs["label"]).':</label>'; // TODO: improve it with more kind of labels...
         }
         
         // set TYPE (manage also textarea)
@@ -65,15 +65,15 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         
         // set NAME
         if(isset($attrs["set_array"])) {
-            $html .= ' name="'.$attrs["set_array"].'['.$name.']"';
+            $html .= ' name="'.htmlspecialchars($attrs["set_array"]).'['.htmlspecialchars($name).']"';
         } else {
-            $html .= ' name="'.$name.'"';
+            $html .= ' name="'.htmlspecialchars($name).'"';
         }
         
         // set OTHER ATTRIBUTES 
         foreach ($this->_attr_other AS $attribute) {
             if(isset($attrs[$attribute])) {
-                $html .= ' '.$attribute.'="'.$attrs[$attribute].'"';
+                $html .= ' '.htmlspecialchars($attribute).'="'.htmlspecialchars($attrs[$attribute]).'"';
             }
         }
         
@@ -103,13 +103,13 @@ class Savant3_Plugin_inputField extends Savant3_Plugin {
         if( $is_textarea ) {
             $html .= '>'.$value.'</textarea>';
         } else {
-            $html .= !is_null($value) ? ' value="'.$value.'"' : '';
+            $html .= !is_null($value) ? ' value="'.htmlspecialchars($value, ENT_QUOTES).'"' : '';
             $html .= ' />';
         }
         
         // NOTE
         if(isset($attrs["note"])) {
-            $html .= ' <span id="np_'.$name.'">'.$attrs["note"].'</span>';
+            $html .= ' <span id="np_'.htmlspecialchars($name).'">'.$attrs["note"].'</span>';
         }        
         
         $html .= ( $type != "hidden") ? '<br />' : '';
