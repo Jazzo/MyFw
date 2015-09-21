@@ -12,7 +12,7 @@ class MyFw_DB extends PDO {
         // get Config Application
         $appConfig = Zend_Registry::get('appConfig');
         $dbParams = $appConfig->database->params;
-        $dsn = 'mysql:host='.$dbParams->host.';dbname='.$dbParams->dbname;
+        $dsn = 'mysql:host='.$dbParams->host.';dbname='.$dbParams->dbname.';charset=utf8';
         $options = array();
         parent::__construct($dsn, $dbParams->username, $dbParams->password, $options);
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
