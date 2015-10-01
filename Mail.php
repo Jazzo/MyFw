@@ -56,6 +56,11 @@ class MyFw_Mail
         $this->_view->assign($property, $value);
         return $this;
     }
+    
+    public function setSubject($subject)
+    {
+        parent::setSubject("[" .$this->_config->default_name . "] " . $subject);
+    }
 
     public function sendHtmlTemplate($template, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
