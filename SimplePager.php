@@ -90,7 +90,7 @@ class MyFw_SimplePager {
      */
     public function getURL_Next()
     {
-        return "/dashboard/index/page/" . ($this->_page + 1);
+        return $this->_url . "/page/" . ($this->_page + 1);
     }
     
     /**
@@ -99,7 +99,7 @@ class MyFw_SimplePager {
      */
     public function getURL_Prev()
     {
-        return "/dashboard/index/page/" . (($this->_page > 0) ? ($this->_page - 1) : 0);
+        return $this->_url . "/page/" . (($this->_page > 0) ? ($this->_page - 1) : 0);
     }
     
     /**
