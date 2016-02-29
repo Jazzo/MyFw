@@ -57,6 +57,11 @@ class MyFw_Mail
         return $this;
     }
     
+    public function setDefaultTo()
+    {
+        $this->addTo($this->_config->default_email, $this->_config->default_name);
+    }
+    
     public function setSubject($subject)
     {
         parent::setSubject("[" .$this->_config->default_name . "] " . $subject);
