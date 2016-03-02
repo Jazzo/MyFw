@@ -59,7 +59,7 @@ class MyFw_Mail
     
     public function setDefaultTo()
     {
-        $this->addTo($this->_config->default_email, $this->_config->default_name);
+        $this->addTo($this->_config->sender_email, $this->_config->sender_name);
     }
     
     public function setSubject($subject)
