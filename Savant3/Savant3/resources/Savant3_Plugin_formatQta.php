@@ -3,10 +3,10 @@
 class Savant3_Plugin_formatQta extends Savant3_Plugin {
 	
 	
-	function formatQta($val, $udm="")
+	function formatQta($val)
 	{
-        $hasDecimal = is_numeric( $val ) && floor( $val ) != $val;
-        return $hasDecimal ? (number_format($val, 3, ",", ".") . " " . $udm) : floor($val);
+        $hasDecimal = is_numeric( $val ) && intval( $val ) != $val;
+        return $hasDecimal ? number_format($val, 3, ",", ".") : intval($val);
 	}
 
 }
