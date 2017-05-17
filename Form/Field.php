@@ -91,33 +91,50 @@ class MyFw_Form_Field {
         $this->_attrs["disabled"] = true;
     }
 
-    
+    public function getError()
+    {
+        return $this->_attrs["error"];
+    }
+
     public function setError($msg=true) {
         $this->_attrs["error"] = $msg;
+    }
+
+    public function setValidators($validators)
+    {
+        $this->_attrs["validators"] = $validators;
     }
 
     public function hasValidators()
     {
         return isset($this->_attrs["validators"]);
     }
+
+    public function getValidatorsParams()
+    {
+        return $this->_attrs["validators"];
+    }
     
     public function validate() {
         
         $validators = $this->_attrs["validators"];
         $value = $this->getValue();
-        
-        foreach ($validators AS $validator) {
-
-            switch ($validator) {
-                case "Number":
-                        $value = str_replace(",", ".", $value);
-                        $this->setValue((double)$value);
-                        return is_numeric($value) ? false : "Deve essere in formato numerico. Es: 12,45 o 12.45 (usa la virgola o il punto per i decimali)";
-
-                default:
-                        return false;
+        foreach ($validators AS $validator => $params)
+        {
+            $valObjName = "MyFw_Form_Validators_" . $validator;
+            if(class_exists($valObjName)) {
+                $valObj = new $valObjName();
+                $ret = $valObj->validate($value, $params);
+                if($ret->return === false) {
+                    $this->setError($ret->error_msg);
+                    return false;
+                }
+            } else {
+                $this->setError("ERRORE: Validator NOT exists!");
+                return false;
             }
-        }        
+
+        }
     }
     
     public function getArrayAttributes()

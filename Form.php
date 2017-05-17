@@ -117,9 +117,9 @@ class MyFw_Form {
 
                     // check VALIDATORS
                     if($fieldObj->hasValidators()) {
-                        $error = $this->validate($name);
-                        if($error !== false) {
-                            $this->setError($name, $error);
+                        $error = $fieldObj->validate($name);
+                        if($error === false) {
+                            $this->setError($name, $fieldObj->getError());
                         }
                     }
 
