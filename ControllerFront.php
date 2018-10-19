@@ -23,7 +23,7 @@ class MyFw_ControllerFront {
         // include and start autoloader
         include_once("Autoloader.php");
         Autoloader::Register();
-        
+
         // set Instance
         self::$instance = $this;
 
@@ -50,7 +50,13 @@ class MyFw_ControllerFront {
         $bs->run();
         return $this;
     }
-    
+
+    public function bootstrap_api() {
+        $bs = new Bootstrap();
+        $bs->run_api();
+        return $this;
+    }
+
     public function run() {
         $this->_controller = $this->_router->getController();
         $this->_action = $this->_router->getAction();
